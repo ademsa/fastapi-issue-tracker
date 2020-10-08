@@ -21,7 +21,7 @@ A very basic Issue Tracker REST API built using FastAPI
 
 `pip install poetry`
 
-cd `~/fastapi-issue-tracker-files/fastapi-issue-tracker`
+`cd ~/fastapi-issue-tracker-files/fastapi-issue-tracker`
 
 `poetry install`
 

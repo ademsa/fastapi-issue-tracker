@@ -67,5 +67,6 @@ venv.bak/
 dmypy.json
 
 # Misc
+.DS_Store
 .idea
 !fastapi_issue_tracker/.env.example

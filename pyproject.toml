@@ -4,7 +4,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "fastapi_issue_tracker"
-version = "0.1.0"
+version = "0.2.0"
 description = "A very basic Issue Tracker REST API built using FastAPI"
 license = "MIT"
 authors = []
@@ -14,9 +14,12 @@ python = "^3.7"
 fastapi = "^0.61.1"
 SQLAlchemy = "^1.3.19"
 uvicorn = "^0.12.0"
-pydantic = "^1.6.1"
+pydantic = {extras = ["dotenv"], version = "^1.7.3"}
 psycopg2 = "^2.8.6"
 starlette = "^0.13.6"
+python-jose = "^3.2.0"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-multipart = "^0.0.5"
 
 [tool.poetry.scripts]
 app = "fastapi_issue_tracker.main:start"

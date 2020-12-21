@@ -1,26 +1,28 @@
 from sqlalchemy import create_engine
-from sqlalchemy.engine import Engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
+
+from fastapi_issue_tracker.config import settings
 
 BaseModel = declarative_base()
 
 
 class Database:
-    def __init__(self, db_host: str, db_name: str, db_user: str, db_password: str):
-        self._url = f"postgresql://{db_user}:{db_password}@{db_host}/{db_name}"
-        self._engine = create_engine(self._url)
-        self._session_local = sessionmaker(
-            autocommit=False, autoflush=False, bind=self._engine
-        )
+    URL = (
+        f"postgresql://{settings.DB_USER}:{settings.DB_PASSWORD}"
+        f"@{settings.DB_HOST}/{settings.DB_NAME}"
+    )
+    ENGINE = create_engine(URL)
+    SESSION_LOCAL = sessionmaker(autocommit=False, autoflush=False, bind=ENGINE)
 
-    @property
-    def engine(self) -> Engine:
-        return self._engine
-
-    def get_db(self) -> Session:
-        db = self._session_local()
+    @staticmethod
+    def get_db() -> Session:
+        db = Database.SESSION_LOCAL()
         try:
             yield db
         finally:
             db.close()
+
+    @staticmethod
+    def get_db_now() -> Session:
+        return Database.SESSION_LOCAL()

@@ -13,6 +13,19 @@ from sqlalchemy.orm import relationship
 from fastapi_issue_tracker.data.database import BaseModel
 
 
+class User(BaseModel):
+    __tablename__ = "users"
+
+    id = Column(Integer, autoincrement=True, primary_key=True, unique=True, index=True)
+    full_name = Column(String, index=True, nullable=False)
+    email = Column(String, index=True, nullable=True)
+    username = Column(String, index=True, nullable=False)
+    password = Column(String, index=True, nullable=True)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime, nullable=True)
+    is_active = Column(Boolean, server_default=str(True), nullable=False)
+
+
 class Project(BaseModel):
     __tablename__ = "projects"
 

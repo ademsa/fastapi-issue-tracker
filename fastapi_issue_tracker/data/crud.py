@@ -6,6 +6,57 @@ from sqlalchemy.orm import Session
 from fastapi_issue_tracker.data import models, schemas
 
 
+def get_user(db: Session, user_id: int) -> typing.Union[models.User, typing.Any]:
+    return db.query(models.User).filter(models.User.id == user_id).first()
+
+
+def get_user_by_username(
+    db: Session, username: str
+) -> typing.Union[models.User, typing.Any]:
+    return db.query(models.User).filter(models.User.username == username).first()
+
+
+def get_users(
+    db: Session, skip: int = 0, limit: int = 100
+) -> typing.Union[typing.List, typing.Any]:
+    return db.query(models.User).offset(skip).limit(limit).all()
+
+
+def create_user(db: Session, user: schemas.UserCreate) -> models.User:
+    db_item = models.User(
+        full_name=user.full_name,
+        email=user.email,
+        username=user.username,
+        password=user.password,
+    )
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+
+
+def update_user(db: Session, user: schemas.UserUpdate) -> models.User:
+    db_item = get_user(db, user.id)
+    db_item.full_name = user.full_name
+    db_item.email = user.email
+    db_item.username = user.username
+    db_item.password = user.password
+    db_item.updated_at = datetime.now()
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+
+
+def delete_user(db: Session, user_id: int) -> models.User:
+    db_item = get_user(db, user_id)
+    db_item.is_active = False
+    db_item.updated_at = datetime.now()
+    db.add(db_item)
+    db.commit()
+    return db_item
+
+
 def get_project(
     db: Session, project_id: int
 ) -> typing.Union[models.Project, typing.Any]:

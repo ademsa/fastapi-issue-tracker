@@ -4,10 +4,37 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
 class ItemBase(BaseModel):
     created_at: datetime
     updated_at: typing.Optional[datetime] = None
     is_active: bool
+
+
+class UserBase(BaseModel):
+    full_name: str
+    email: str
+    username: str
+    password: str
+
+
+class UserCreate(UserBase):
+    pass
+
+
+class UserUpdate(UserBase):
+    id: int
+
+
+class User(ItemBase, UserBase):
+    id: int
+
+    class Config:
+        orm_mode = True
 
 
 class ProjectBase(BaseModel):
